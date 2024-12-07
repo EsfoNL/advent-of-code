@@ -27,11 +27,6 @@ pub fn run() {
                     } else {
                         None
                     }
-                    // let mut operators = Vec::with_capacity(rest_vec_len - 1);
-                    // for _ in 0..(rest_vec_len - 1) {
-                    //     operators.push((e & 1) > 0);
-                    //     e >>= 1;
-                    // }
                 })
                 // check if any permutation matches the test value
                 .any(|mut e| {
@@ -82,11 +77,6 @@ pub fn run() {
                     } else {
                         None
                     }
-                    // let mut operators = Vec::with_capacity(rest_vec_len - 1);
-                    // for _ in 0..(rest_vec_len - 1) {
-                    //     operators.push((e & 1) > 0);
-                    //     e >>= 1;
-                    // }
                 })
                 // check if any permutation matches the test value
                 .any(|mut e| {
