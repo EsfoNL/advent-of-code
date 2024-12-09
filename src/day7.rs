@@ -41,7 +41,7 @@ pub fn run() {
                         res
                     }) == test_res
                     {
-                        println!("match! {test_res}");
+                        // println!("match! {test_res}");
                         true
                     } else {
                         false
@@ -101,7 +101,7 @@ pub fn run() {
                         res
                     }) == test_res
                     {
-                        println!("match! {test_res}");
+                        // println!("match! {test_res}");
                         true
                     } else {
                         false

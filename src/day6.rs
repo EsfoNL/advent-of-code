@@ -1,7 +1,7 @@
 use std::{
     fs::File,
     io::BufRead,
-    ops::{Add, BitAnd, BitOr, BitOrAssign, Index, IndexMut},
+    ops::{Add, BitAnd, BitOr, BitOrAssign, Index, IndexMut, Mul, Sub},
     thread::{self, sleep},
     time::Duration,
 };
@@ -51,24 +51,24 @@ impl From<&Dir> for DirBitMap {
 
 use Dir::*;
 
-#[derive(Clone, Debug)]
-struct Coord(usize, usize);
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Coord<T = usize>(pub T, pub T);
 
-impl<T> Index<&Coord> for Vec<Vec<T>> {
+impl<T> Index<&Coord<usize>> for Vec<Vec<T>> {
     type Output = T;
 
-    fn index(&self, index: &Coord) -> &Self::Output {
+    fn index(&self, index: &Coord<usize>) -> &Self::Output {
         &self[index.0][index.1]
     }
 }
 
-impl<T> IndexMut<&Coord> for Vec<Vec<T>> {
-    fn index_mut(&mut self, index: &Coord) -> &mut Self::Output {
+impl<T> IndexMut<&Coord<usize>> for Vec<Vec<T>> {
+    fn index_mut(&mut self, index: &Coord<usize>) -> &mut Self::Output {
         &mut self[index.0][index.1]
     }
 }
 
-impl Add<(isize, isize)> for &Coord {
+impl Add<(isize, isize)> for &Coord<usize> {
     type Output = (isize, isize);
 
     fn add(self, rhs: (isize, isize)) -> Self::Output {
@@ -76,10 +76,52 @@ impl Add<(isize, isize)> for &Coord {
     }
 }
 
-impl TryFrom<(isize, isize)> for Coord {
+impl<T> Add for &Coord<T>
+where
+    T: Add + Copy,
+{
+    type Output = Coord<T::Output>;
+
+    fn add(self, rhs: &Coord<T>) -> Self::Output {
+        Coord(self.0 + rhs.0, self.1 + rhs.1)
+    }
+}
+
+impl<T> Sub for &Coord<T>
+where
+    T: Sub + Copy,
+{
+    type Output = Coord<T::Output>;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Coord(self.0 - rhs.0, self.1 - rhs.1)
+    }
+}
+
+impl<T, W> Mul<T> for &Coord<W>
+where
+    W: Mul<T> + Copy,
+    T: Copy,
+{
+    type Output = Coord<W::Output>;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        Coord(self.0 * rhs, self.1 * rhs)
+    }
+}
+
+impl TryFrom<(isize, isize)> for Coord<usize> {
     type Error = <usize as TryFrom<isize>>::Error;
 
     fn try_from(value: (isize, isize)) -> Result<Self, Self::Error> {
+        Ok(Coord(value.0.try_into()?, value.1.try_into()?))
+    }
+}
+
+impl TryFrom<Coord<isize>> for Coord<usize> {
+    type Error = <usize as TryFrom<isize>>::Error;
+
+    fn try_from(value: Coord<isize>) -> Result<Self, Self::Error> {
         Ok(Coord(value.0.try_into()?, value.1.try_into()?))
     }
 }
@@ -240,7 +282,7 @@ pub fn run() {
             guard_pos = new_guard_pos;
             if (&visited_dir[&guard_pos] & &guard_dir).0 != 0 {
                 count += 1;
-                print_map_context(10000, &guard_pos, &guard_dir, &new_map, &visited_dir);
+                // print_map_context(10000, &guard_pos, &guard_dir, &new_map, &visited_dir);
                 break;
             }
             visited_dir[&guard_pos] |= &guard_dir;

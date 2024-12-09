@@ -7,6 +7,7 @@ mod day4;
 mod day5;
 mod day6;
 mod day7;
+mod day8;
 
 macro_rules! days {
     ($input:expr, [$($i:ident),*]) => {
@@ -27,6 +28,6 @@ fn main() {
         panic!("specify day(s) or `all` to run");
     }
     for i in std::env::args().skip(1) {
-        days!(i.as_str(), [day1, day2, day3, day4, day5, day6, day7]);
+        days!(i.as_str(), [day1, day2, day3, day4, day5, day6, day7, day8]);
     }
 }
