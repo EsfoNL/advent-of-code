@@ -51,8 +51,14 @@ impl From<&Dir> for DirBitMap {
 
 use Dir::*;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct Coord<T = usize>(pub T, pub T);
+
+impl From<Coord<usize>> for Coord<isize> {
+    fn from(value: Coord<usize>) -> Self {
+        Coord(value.0 as isize, value.1 as isize)
+    }
+}
 
 impl<T> Index<&Coord<usize>> for Vec<Vec<T>> {
     type Output = T;
@@ -76,13 +82,14 @@ impl Add<(isize, isize)> for &Coord<usize> {
     }
 }
 
-impl<T> Add for &Coord<T>
+impl<T, W> Add<&Coord<W>> for &Coord<T>
 where
-    T: Add + Copy,
+    T: Add<W> + Copy,
+    W: Copy,
 {
     type Output = Coord<T::Output>;
 
-    fn add(self, rhs: &Coord<T>) -> Self::Output {
+    fn add(self, rhs: &Coord<W>) -> Self::Output {
         Coord(self.0 + rhs.0, self.1 + rhs.1)
     }
 }
@@ -123,6 +130,21 @@ impl TryFrom<Coord<isize>> for Coord<usize> {
 
     fn try_from(value: Coord<isize>) -> Result<Self, Self::Error> {
         Ok(Coord(value.0.try_into()?, value.1.try_into()?))
+    }
+}
+
+impl Coord<isize> {
+    #[allow(clippy::ptr_arg)]
+    pub fn get_from<'a, T>(&self, vec: &'a Vec<Vec<T>>) -> Option<&'a T> {
+        if self.0 < 0
+            || self.1 < 0
+            || self.0 >= vec.len() as isize
+            || self.1 >= vec[0].len() as isize
+        {
+            None
+        } else {
+            Some(&vec[&Coord::<usize>::try_from(self.clone()).unwrap()])
+        }
     }
 }
 
