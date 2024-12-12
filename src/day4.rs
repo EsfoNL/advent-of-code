@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufRead};
 
-pub fn run() {
+pub fn run(_: bool) {
     let input = File::open_buffered("inputs/day4")
         .unwrap()
         .lines()

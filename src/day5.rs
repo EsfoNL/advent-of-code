@@ -25,7 +25,7 @@ where
     }
 }
 
-pub fn run() {
+pub fn run(_: bool) {
     let mut f = File::open_buffered("inputs/day5").unwrap().lines();
 
     let mut rules: Vec<(u32, u32)> = Vec::new();

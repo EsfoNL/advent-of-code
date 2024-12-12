@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-pub fn run() {
+pub fn run(_: bool) {
     println!(
         "{}",
         BufReader::new(File::open("inputs/day2").unwrap())

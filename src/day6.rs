@@ -193,7 +193,7 @@ fn print_map_context(
     println!();
 }
 
-pub fn run() {
+pub fn run(_: bool) {
     let (map, guard_start_dir, guard_start_pos) = {
         let mut guard_pos = Coord(0, 0);
         let mut guard_dir = North;

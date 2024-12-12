@@ -3,7 +3,7 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-pub(crate) fn run() {
+pub(crate) fn run(_: bool) {
     let (mut left_vec, mut right_vec): (Vec<_>, Vec<_>) =
         BufReader::new(File::open("inputs/day1").expect("input file not found"))
             .lines()

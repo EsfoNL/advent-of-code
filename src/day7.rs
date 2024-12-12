@@ -1,7 +1,7 @@
 use core::panic;
 use std::{fs::File, io::BufRead};
 
-pub fn run() {
+pub fn run(_: bool) {
     let res = File::open_buffered("inputs/day7")
         .unwrap()
         .lines()

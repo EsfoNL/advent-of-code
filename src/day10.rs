@@ -2,7 +2,7 @@ use std::{collections::HashSet, fs::File, io::BufRead};
 
 use crate::day6::Coord;
 
-pub fn run() {
+pub fn run(_: bool) {
     let map = File::open_buffered("inputs/day10")
         .unwrap()
         .lines()

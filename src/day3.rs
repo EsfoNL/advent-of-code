@@ -5,7 +5,7 @@ use std::{
 
 use regex::Regex;
 
-pub fn run() {
+pub fn run(_: bool) {
     let chars = std::fs::read_to_string("inputs/day3").unwrap();
     let mut enabled = true;
 

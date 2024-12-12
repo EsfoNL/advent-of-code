@@ -6,7 +6,7 @@ fn inside(c: &Coord<isize>, (x, y): (usize, usize)) -> bool {
     !(c.0 < 0 || c.1 < 0 || c.0 > (x as isize) || c.1 > (y as isize))
 }
 
-pub fn run() {
+pub fn run(_: bool) {
     let mut mapmap = HashMap::new();
 
     let map = File::open_buffered("inputs/day8")

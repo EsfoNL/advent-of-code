@@ -1,4 +1,3 @@
-use core::borrow;
 use std::{collections::HashMap, fs::File};
 
 #[derive(Debug)]
@@ -132,9 +131,22 @@ impl<T> NodeRefMut<'_, T> {
             past,
         });
     }
+
+    pub fn as_index(&self) -> usize {
+        self.index
+    }
 }
 
 impl<T> VecLinkedList<T> {
+    pub fn get_index(&mut self, refer: usize) -> Option<NodeRefMut<'_, T>> {
+        self.list.get(refer)?.as_ref()?;
+
+        Some(NodeRefMut {
+            list: self,
+            index: refer,
+        })
+    }
+
     pub fn front_mut(&mut self) -> Option<NodeRefMut<'_, T>> {
         if self.frontback.is_some() {
             Some(NodeRefMut {
@@ -223,6 +235,12 @@ impl<T> VecLinkedList<T> {
     }
 }
 
+impl<T> Default for VecLinkedList<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T> FromIterator<T> for VecLinkedList<T> {
     fn from_iter<I: IntoIterator<Item = T>>(iter: I) -> Self {
         let mut linked_list = Self::new();
@@ -233,7 +251,7 @@ impl<T> FromIterator<T> for VecLinkedList<T> {
     }
 }
 
-struct NodeIter<'a, T> {
+pub struct NodeIter<'a, T> {
     list: &'a VecLinkedList<T>,
     index: Option<usize>,
     ended: bool,
@@ -320,7 +338,7 @@ fn resolve_len(
     1
 }
 
-pub fn run() {
+pub fn run(_: bool) {
     let mut nums: VecLinkedList<_> =
         std::io::read_to_string(File::open_buffered("inputs/day11").unwrap())
             .unwrap()
@@ -334,9 +352,9 @@ pub fn run() {
     // }
     // println!("]");
 
-    for i in 0..25 {
+    for _i in 0..25 {
         let mut index = nums.front_mut().unwrap();
-        // println!("blink: {}", i + 1);
+        // println!("blink: {}", _i + 1);
         loop {
             match *index {
                 0 => *index = 1,

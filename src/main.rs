@@ -14,12 +14,12 @@ mod day8;
 mod day9;
 
 macro_rules! days {
-    ($input:expr, [$($i:ident),*]) => {
+    ($input:expr, $vis:expr, [$($i:ident),*]) => {
         {
         match $input {
-            $(stringify!($i) => $i::run(),)*
+            $(stringify!($i) => $i::run($vis),)*
             "all" => {
-                $($i::run();)*
+                $($i::run($vis);)*
             }
             _ => panic!("invalid day"),
         }
@@ -34,6 +34,7 @@ fn main() {
     for i in std::env::args().skip(1) {
         days!(
             i.as_str(),
+            std::env::var("VISUALIZE").is_ok(),
             [day1, day2, day3, day4, day5, day6, day7, day8, day9, day10, day11, day12]
         );
     }

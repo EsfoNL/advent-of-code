@@ -2,7 +2,7 @@ use std::io::Read;
 
 // fn expand(input: &str) -> impl Iterator<>
 
-pub fn run() {
+pub fn run(_: bool) {
     let mut map = std::fs::File::open_buffered("inputs/day9")
         .unwrap()
         .bytes()
